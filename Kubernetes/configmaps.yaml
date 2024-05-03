@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myapp-configmap
+data:
+  SPRING_PROFILES_ACTIVE: prod
+  SPRING_CONFIG_IMPORT: "configserver:http://configserver:21000/"
+  EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://discoveryserver:21001/eureka/"
+  SERVICE_URL_DEFAULT_ZONE: "http://discoveryserver:21001/eureka/"
+  CONFIGSERVER_APPLICATION_NAME: configserver
+  DISCOVERYSERVER_APPLICATION_NAME: discoveryserver
+  PROFILE_APPLICATION_NAME: profile
+  USERS_APPLICATION_NAME: users
+  VEHICLES_APPLICATION_NAME: vehicles
+  GATEWAY_APPLICATION_NAME: gateway
+  GATEWAY_REDIS_HOST: myappredis

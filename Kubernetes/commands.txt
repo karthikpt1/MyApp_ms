@@ -1,0 +1,16 @@
+build
+mvn compile jib:dockerBuild
+
+admin user token command for kubernetes dashboard
+kubectl -n kubernetes-dashboard create token admin-user
+
+redis docker command
+docker run -p 6379:6379 --name myappredis -d redis
+
+start Kubernetes dashboard
+helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dashboard
+
+
+
+
+

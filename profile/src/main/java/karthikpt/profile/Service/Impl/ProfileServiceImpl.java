@@ -26,8 +26,12 @@ public class ProfileServiceImpl implements IProfileService {
         ResponseEntity<VehicleDTO> vehicleDTOResponseEntity = vehiclesFeignClient.getVehicle(userName);
 
         ProfileDTO profileDTO = new ProfileDTO();
-        profileDTO.setUserDto(userDTOResponseEntity.getBody());
-        profileDTO.setVehicleDto(vehicleDTOResponseEntity.getBody());
+        if(userDTOResponseEntity != null) {
+            profileDTO.setUserDto(userDTOResponseEntity.getBody());
+        }
+        if(vehicleDTOResponseEntity != null) {
+            profileDTO.setVehicleDto(vehicleDTOResponseEntity.getBody());
+        }
 
         return profileDTO;
     }

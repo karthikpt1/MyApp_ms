@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vehicles-deployment
+  labels:
+    app: vehicles
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vehicles
+  template:
+    metadata:
+      labels:
+        app: vehicles
+    spec:
+      containers:
+      - name: vehicles
+        image: karthikpt/vehicles:v1
+        ports:
+        - containerPort: 11001
+        env:
+        - name: SPRING_APPLICATION_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: myapp-configmap
+              key: VEHICLES_APPLICATION_NAME
+        - name: SPRING_PROFILES_ACTIVE
+          valueFrom: 
+            configMapKeyRef:
+              name: myapp-configmap
+              key: SPRING_PROFILES_ACTIVE
+        - name: SPRING_CONFIG_IMPORT
+          valueFrom: 
+            configMapKeyRef:
+              name: myapp-configmap
+              key: SPRING_CONFIG_IMPORT
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          valueFrom: 
+            configMapKeyRef:
+              name: myapp-configmap
+              key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vehicles
+spec:
+  selector:
+    app: vehicles
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 11001
+      targetPort: 11001

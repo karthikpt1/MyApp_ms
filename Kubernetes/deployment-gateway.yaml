@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-deployment
+  labels:
+    app: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+      - name: gateway
+        image: karthikpt/gateway:v1
+        ports:
+        - containerPort: 4444
+        env:
+        - name: SPRING_APPLICATION_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: myapp-configmap
+              key: GATEWAY_APPLICATION_NAME
+        - name: SPRING_PROFILES_ACTIVE
+          valueFrom: 
+            configMapKeyRef:
+              name: myapp-configmap
+              key: SPRING_PROFILES_ACTIVE
+        - name: SPRING_CONFIG_IMPORT
+          valueFrom: 
+            configMapKeyRef:
+              name: myapp-configmap
+              key: SPRING_CONFIG_IMPORT
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          valueFrom: 
+            configMapKeyRef:
+              name: myapp-configmap
+              key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+        - name: SPRING_DATA_REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: myapp-configmap
+              key: GATEWAY_REDIS_HOST
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+spec:
+  selector:
+    app: gateway
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 4444
+      targetPort: 4444
