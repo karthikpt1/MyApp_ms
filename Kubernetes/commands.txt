@@ -11,6 +11,12 @@ start Kubernetes dashboard
 helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dashboard
 
 
+Install the latest LTS version: brew install jenkins-lts
+Start the Jenkins service: brew services start jenkins-lts
+Restart the Jenkins service: brew services restart jenkins-lts
+Update the Jenkins version: brew upgrade jenkins-lts
 
 
+kubectl describe secret jenkins -n jenkins
 
+docker run -d -p 3000:3000 --name=grafana grafana/grafana-enterprise

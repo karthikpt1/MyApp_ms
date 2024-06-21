@@ -10,7 +10,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.cloud.circuitbreaker.resilience4j.ReactiveResilience4JCircuitBreakerFactory;
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder;
 import org.springframework.cloud.client.circuitbreaker.Customizer;
+import org.springframework.util.unit.DataSize;
 import reactor.core.publisher.Mono;
+
+import java.time.Duration;
 
 @SpringBootApplication
 public class GatewayApplication {
@@ -26,6 +29,7 @@ public class GatewayApplication {
 
 				.route("rewrite_route", r -> r.path("/gateway/**")
 						.filters(f -> f.rewritePath("/gateway/(?<segment>.*)", "/myApp/${segment}")
+								.localResponseCache(Duration.ofMinutes(2), DataSize.ofMegabytes(10))
 								.circuitBreaker(config -> config.setName("myAppCircuitBreaker")
 										.setFallbackUri("forward:/gatewayError"))
 								.requestRateLimiter(config -> config.setRateLimiter(redisRateLimiter())
@@ -39,7 +43,7 @@ public class GatewayApplication {
 
 	@Bean
 	public RedisRateLimiter redisRateLimiter(){
-		return new RedisRateLimiter(1,60,60);
+		return new RedisRateLimiter(30,60,60);
 	}
 
 	@Bean

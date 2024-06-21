@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+data:
+  prometheus.yml: |
+    # Your Prometheus configuration content here
+    global:
+      scrape_interval:     5s # Set the scrape interval to every 5 seconds.
+      evaluation_interval: 5s # Evaluate rules every 5 seconds.
+
+    scrape_configs:
+      - job_name: 'ConfigServer'
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: [ 'configserver.default:21000' ]
+    
+      - job_name: 'discoveryserver'
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: [ 'discoveryserver.default:21001' ]
+    
+      - job_name: 'gateway'
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: [ 'gateway.default:4444' ]
+    
+      - job_name: 'profile'
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: [ 'profile.default:11002' ]
+    
+      - job_name: 'users'
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: [ 'users.default:11000' ]
+    
+      - job_name: 'vehicles'
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: [ 'vehicles.default:11001' ]
